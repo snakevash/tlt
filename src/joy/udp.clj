@@ -56,3 +56,9 @@ post-traumatic-morris
 (say-hello "nihao" "limin")
 (def say-hello-with-defaults (fnil say-hello "World" "People"))
 (say-hello-with-defaults nil nil)
+
+(defprotocol Matrix
+  "测试协议"
+  (lookup [martix i j])
+  (update [martix i j value])
+  ())
