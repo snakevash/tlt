@@ -1,5 +1,6 @@
 (ns main
-  (:use [joy.ch2]))
+  (:use [joy.ch2])
+  (:require [clojure.java.io :as io]))
 
 (defstruct vehicle-struct :make :model :year :color)
 (def vehicle (struct vehicle-struct "Toyota" "Prius" 2009))
@@ -252,3 +253,30 @@ tena
 (= (quote (2 3)) `(2 3))
 
 (let [x '(2 3)] x)
+
+;; ivanpig.github.com 上面的一些范例
+(defn round
+  [^double d ^long precision]
+  {:pre [(not (nil? d)) (not (nil? precision))]}
+  (let [factor (Math/pow 10 precision)]
+    (/ (Math/floor (* d factor)) factor)))
+(round 88 8)
+
+;; clojure.core/apply 是不定参数
+;; clojure 元数只和参数个数有关 而合参数类型无关
+
+
+;; record 也是可以标明类型提示
+(defprotocol Greet
+  (sayHello [this]))
+
+(defrecord Person [^String firstName ^String lastName]
+  Greet
+  (sayHello [this]
+            (println "Hello,my name is ") firstName))
+
+(def a-long-string (slurp "colors.properties"))
+a-long-string
+(spit "colors.properties" "apple=red\r\n" :append true)
+a-long-string
+(.list (io/file "."))
