@@ -167,3 +167,35 @@
       (recur (next coll) (conj acc (f (first coll)))))))
 (strict-map2 - (range 5))
 
+;; 输出绑定改变
+(binding [*out* *err*]
+  (println "Blew up!"))
+
+(def foo-file (clojure.java.io/writer "my.log"))
+(binding [*out* foo-file]
+  (println "Foo,bar."))
+(.close foo-file)
+
+;; 组合字符串
+
+;; 从一个vector 组合成一个shell命令是不错的
+;; str是调用的java's的.toString()方法
+(def lines ["#! /bin/bash\n" "du -a ./ | sort -n -r\n"])
+(apply println lines)
+
+;; str 的几个特别的地方
+(= (str) (str nil))
+(= (str 1 'symbol :keyword) "1symbol:keyword")
+(apply str [1 2 3])
+(str [1 2 3])
+(not= (apply str [1 2 3]) (str [1 2 3]))
+
+;; 字符串是可以被解构的
+(= (let [[f-c s-c] "abcdef"]
+     (str f-c s-c)) "ab")
+
+(require '[clojure.java.io :refer (reader)])
+(def props (java.util.Properties.))
+(.load props (reader "colors.properties"))
+props
+(class props)
