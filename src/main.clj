@@ -199,3 +199,56 @@
 (.load props (reader "colors.properties"))
 props
 (class props)
+
+;; 一些特别的东西
+'()
+[]
+(= () [])
+(class ())
+(class [])
+
+;; comp 相关
+((comp - /) 8)
+(/ 8 3 5)
+((comp str +) 8 7 6)
+(map + [1 2 3] [8 7 6])
+(partial + 5)
+(= ((partial + 5) 100 200)
+   (#(apply + 5 %&) 100 200))
+
+(defn join
+  {:test (fn []
+           (assert
+            (= (join "," [1 2 3]) "1,2,3")))}
+  [sep s]
+  (apply str (interpose sep s)))
+
+(use '[clojure.test :as t])
+(t/run-tests)
+
+;; 宏相关的操作
+(-> 25 Math/sqrt int list)
+(-> (/ 144 12) (/ 2 3) str keyword list)
+(eval '(list 1 2)) ;; 执行form
+(eval (list (symbol "+") 1 2))
+
+(defn contextual-eval [ctx expr]
+  (eval
+   `(let [~@(mapcat (fn [[k v ]] [k `'~v]) ctx)]
+      ~expr)))
+(reverse [[3 2 1 0] [6 5 4] [9 8 7]])
+
+'(1 2 3)
+(def tena 9)
+tena
+`tena
+(quote tena)
+(class (quote tena))
+(class `tena)
+(= (class (quote tena)) (class `tena))
+
+(quote (2 3))
+`(2 3)
+(= (quote (2 3)) `(2 3))
+
+(let [x '(2 3)] x)
